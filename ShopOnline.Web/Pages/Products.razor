@@ -1,0 +1,30 @@
+﻿@page "/"
+@inherits ProductsBase
+
+@if (Products == null)
+{
+    <h3>Products are loading...</h3>
+}
+else
+{
+    <h3 class="mb-5">Products</h3>
+
+    var productCount = Products.Count();
+
+    @if (productCount > 0)
+    {
+        var productByCategory = from product in Products
+                                group product by product.CategoryId into productsByCategoryGroups
+                                select productsByCategoryGroups;
+
+        @foreach(var categoryItemsRow in productByCategory)
+        {
+            <h4>@categoryItemsRow.FirstOrDefault().CategoryName</h4>
+
+            <div class="row mb-3">
+                <DisplayProduct Products="@categoryItemsRow"></DisplayProduct>
+            </div>
+            <hr class="mb-3"/>
+        }
+    }
+}
